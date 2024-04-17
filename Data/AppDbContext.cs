@@ -10,41 +10,35 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.Entity<Postagem>().ToTable("tb_postagens");
-        //modelBuilder.Entity<Tema>().ToTable("tb_temas");
-        //modelBuilder.Entity<Comentario>().ToTable("tb_comentarios");
-        modelBuilder.Entity<User>().ToTable("tb_usuarios");
+        modelBuilder.Entity<Post>().ToTable("tb_posts");
+        modelBuilder.Entity<Theme>().ToTable("tb_themes");
+        modelBuilder.Entity<Comment>().ToTable("tb_comments");
+        modelBuilder.Entity<User>().ToTable("tb_users");
 
-        //_ = modelBuilder.Entity<Postagem>()
-        //    .HasOne(_ => _.Tema)
-        //    .WithMany(t => t.Postagem)
-        //    .HasForeignKey("TemaId")
-        //    .OnDelete(DeleteBehavior.Cascade);
+        _ = modelBuilder.Entity<Post>()
+            .HasOne(_ => _.Theme)
+            .WithMany(t => t.Post)
+            .HasForeignKey("ThemeId")
+            .OnDelete(DeleteBehavior.Cascade);
 
-        //_ = modelBuilder.Entity<Postagem>()
-        //    .HasOne(_ => _.Usuario)
-        //    .WithMany(u => u.Postagem)
-        //    .HasForeignKey("UsuarioId")
-        //    .OnDelete(DeleteBehavior.Cascade);
+        _ = modelBuilder.Entity<Post>()
+            .HasOne(_ => _.User)
+            .WithMany(u => u.Post)
+            .HasForeignKey("UserId")
+            .OnDelete(DeleteBehavior.Cascade);
 
-        //_ = modelBuilder.Entity<Comentario>()
-        //    .HasOne(_ => _.Usuario)
-        //    .WithMany(u => u.Comentario)
-        //    .HasForeignKey("UsuarioId")
-        //    .OnDelete(DeleteBehavior.Cascade);
-        
-        //_ = modelBuilder.Entity<Comentario>()
-        //    .HasOne(_ => _.Postagem)
-        //    .WithMany(p => p.Postagem)
-        //    .HasForeignKey("PostagemId")
-        //    .OnDelete(DeleteBehavior.Cascade);
+        _ = modelBuilder.Entity<Comment>()
+            .HasOne(_ => _.Post)
+            .WithMany(p => p.Comment)
+            .HasForeignKey("PostId")
+            .OnDelete(DeleteBehavior.Cascade);
 
     }
 
     public DbSet<User> Users { get; set; } = null!;
-    //public DbSet<Postagem> Postagens { get; set; } = null!;
-    //public DbSet<Tema> Temas { get; set; } = null!;
-    //public DbSet<Comentario> Comentarios { get; set; } = null!;
+    public DbSet<Post> Posts { get; set; } = null!;
+    public DbSet<Theme> Themes { get; set; } = null!;
+    public DbSet<Comment> Comments { get; set; } = null!;
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -54,7 +48,6 @@ public class AppDbContext : DbContext
 
         foreach (var insertedEntry in insertedEntries)
         {
-            //Se uma propriedade da Classe Auditable estiver sendo criada. 
             if (insertedEntry is Auditable auditableEntity)
             {
                 auditableEntity.Data = new DateTimeOffset(DateTime.Now, new TimeSpan(-3, 0, 0));
@@ -66,8 +59,7 @@ public class AppDbContext : DbContext
                    .Select(x => x.Entity);
 
         foreach (var modifiedEntry in modifiedEntries)
-        {
-            //Se uma propriedade da Classe Auditable estiver sendo atualizada.  
+        { 
             if (modifiedEntry is Auditable auditableEntity)
             {
                 auditableEntity.Data = new DateTimeOffset(DateTime.Now, new TimeSpan(-3, 0, 0));

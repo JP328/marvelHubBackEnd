@@ -20,10 +20,6 @@ public class User
     [Column(TypeName = "varchar"), StringLength(255)]
     public string? Photo { get; set; } = string.Empty;
 
-    //[InverseProperty("Usuario")]
-    //public virtual ICollection<Postagem>? Postagem { get; set; } 
-
-    //[InverseProperty("Usuario")]
-    //public virtual ICollection<Comentarios>? Comentarios { get; set; } 
-
+    [InverseProperty("User")]
+    public virtual ICollection<Post>? Post { get; set; }
 }
