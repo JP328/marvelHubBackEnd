@@ -9,10 +9,10 @@ namespace marvelHub.Model
         public long Id { get; set; }
 
         [Column(TypeName = "varchar"), StringLength(255)]
-        public string type { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
 
         [Column(TypeName = "varchar"), StringLength(255)]
-        public string marvelId { get; set; } = string.Empty;
+        public string MarvelId { get; set; } = string.Empty;
 
         [InverseProperty("Theme")]
         public virtual ICollection<Post>? Post { get; set; }
