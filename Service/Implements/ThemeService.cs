@@ -36,7 +36,7 @@ public class ThemeService : IThemeService
     {
         var Theme = await _context.Themes
             .Include(t => t.Post)
-            .Where(t => t.Type.ToUpper().Contains(type.ToUpper()))
+            .Where(t => t.Type.ToUpper().Equals(type.ToUpper()))
             .ToListAsync();
 
         return Theme;
