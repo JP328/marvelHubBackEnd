@@ -20,6 +20,10 @@ public class User
     [Column(TypeName = "varchar"), StringLength(255)]
     public string? Photo { get; set; } = string.Empty;
 
+    //[Column(TypeName = "bit")]
+    //public bool isAdmin { get; set; } = false;
+
+
     [InverseProperty("User")]
     public virtual ICollection<Post>? Post { get; set; }
 }
