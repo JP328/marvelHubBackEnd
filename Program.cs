@@ -1,5 +1,8 @@
 using marvelHub.Data;
+using marvelHub.Validator;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using marvelHub.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +20,6 @@ builder.Services.AddCors(options => {
         });
 });
 
-// Conexão com o Banco de dados
 var connectionString = builder.Configuration.
         GetConnectionString("DefaultConnection");
 
@@ -25,9 +27,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
 
+builder.Services.AddTransient<IValidator<Post>, PostValidator>();
+builder.Services.AddTransient<IValidator<Theme>, ThemeValidator>();
+builder.Services.AddTransient<IValidator<Comment>, CommentValidator>();
+builder.Services.AddTransient<IValidator<User>, UserValidator>();
+
 var app = builder.Build();
 
-//Criar o banco de dados e as tabelas automaticamente
 using (var scope = app.Services.CreateAsyncScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
