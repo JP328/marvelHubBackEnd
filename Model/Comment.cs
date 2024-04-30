@@ -14,6 +14,9 @@ namespace marvelHub.Model
         [Column(TypeName = "varchar"), StringLength(255)]
         public string UserId { get; set; } = string.Empty;
 
+        [InverseProperty("Comment")]
+        public virtual ICollection<Report>? Report { get; set; }
+
         public virtual Post? Post { get; set; }
     }
 }

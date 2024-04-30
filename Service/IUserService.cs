@@ -14,5 +14,5 @@ public interface IUserService
 
     Task<User?> Update(User user);
 
-    //Task Delete(User user);
+    Task Delete(User user);
 }

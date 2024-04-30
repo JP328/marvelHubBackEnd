@@ -36,7 +36,7 @@ public class UserService : IUserService
         {
             var User = await _context.Users
                 .Include(u => u.Post)
-                .FirstAsync(u => u.Id == id);]
+                .FirstAsync(u => u.Id == id);
 
             User.Password = "";
 
@@ -72,10 +72,19 @@ public class UserService : IUserService
 
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, workFactor: 13);
 
-        _context.Entry(UserUpdate).State = EntityState.Detached;
+        if(UserUpdate is not null)
+            _context.Entry(UserUpdate).State = EntityState.Detached;
+
+        
         _context.Entry(user).State = EntityState.Modified;
         await _context.SaveChangesAsync();
 
         return user;
+    }
+
+    public async Task Delete(User user)
+    {
+        _context.Remove(user);
+        await _context.SaveChangesAsync();
     }
 }

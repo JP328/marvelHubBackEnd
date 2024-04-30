@@ -20,9 +20,13 @@ public class User
     [Column(TypeName = "varchar"), StringLength(255)]
     public string? Photo { get; set; } = string.Empty;
 
-    //[Column(TypeName = "bit")]
-    //public bool isAdmin { get; set; } = false;
+    [Column(TypeName = "bit")]
+    public bool IsAdmin { get; set; } = false;
 
+    [Column(TypeName = "varchar"), StringLength(255)]
+    public string Status { get; set; } = string.Empty;
+
+    public virtual ICollection<Report>? Report { get; set; }
 
     [InverseProperty("User")]
     public virtual ICollection<Post>? Post { get; set; }

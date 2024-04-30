@@ -1,6 +1,5 @@
 ﻿using marvelHub.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Security.AccessControl;
 
 namespace marvelHub.Data;
 
@@ -14,6 +13,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Theme>().ToTable("tb_themes");
         modelBuilder.Entity<Comment>().ToTable("tb_comments");
         modelBuilder.Entity<User>().ToTable("tb_users");
+        modelBuilder.Entity<Report>().ToTable("tb_reports");
 
         _ = modelBuilder.Entity<Post>()
             .HasOne(_ => _.Theme)
@@ -33,12 +33,32 @@ public class AppDbContext : DbContext
             .HasForeignKey("PostId")
             .OnDelete(DeleteBehavior.Cascade);
 
+        _ = modelBuilder.Entity<Report>()
+            .HasOne(_ => _.User)
+            .WithMany(u => u.Report)
+            .HasForeignKey("UserId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        _ = modelBuilder.Entity<Report>()
+            .HasOne(_ => _.Post)
+            .WithMany(p => p.Report)
+            .HasForeignKey("UserId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        _ = modelBuilder.Entity<Report>()
+            .HasOne(_ => _.Comment)
+            .WithMany(c => c.Report)
+            .HasForeignKey("UserId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+
     }
 
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Post> Posts { get; set; } = null!;
     public DbSet<Theme> Themes { get; set; } = null!;
     public DbSet<Comment> Comments { get; set; } = null!;
+    public DbSet<Report> Reports { get; set; } = null!;
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
