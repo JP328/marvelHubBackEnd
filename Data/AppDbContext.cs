@@ -3,10 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace marvelHub.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public AppDbContext (DbContextOptions<AppDbContext> options) : base(options) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Post>().ToTable("tb_posts");
@@ -31,25 +29,25 @@ public class AppDbContext : DbContext
             .HasOne(_ => _.Post)
             .WithMany(p => p.Comment)
             .HasForeignKey("PostId")
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.ClientCascade);
 
         _ = modelBuilder.Entity<Report>()
             .HasOne(_ => _.User)
             .WithMany(u => u.Report)
             .HasForeignKey("UserId")
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.ClientCascade);
 
         _ = modelBuilder.Entity<Report>()
             .HasOne(_ => _.Post)
             .WithMany(p => p.Report)
             .HasForeignKey("UserId")
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.ClientCascade);
 
         _ = modelBuilder.Entity<Report>()
             .HasOne(_ => _.Comment)
             .WithMany(c => c.Report)
             .HasForeignKey("UserId")
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.ClientCascade);
 
 
     }

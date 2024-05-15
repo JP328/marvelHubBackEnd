@@ -17,6 +17,6 @@ namespace marvelHub.Model
         [InverseProperty("Comment")]
         public virtual ICollection<Report>? Report { get; set; }
 
-        public virtual Post? Post { get; set; }
+        public virtual Post Post { get; set; } = new Post();
     }
 }

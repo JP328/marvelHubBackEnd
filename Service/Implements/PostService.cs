@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace marvelHub.Service.Implements
 {
-    public class PostService : IPostService
+    public class PostService(AppDbContext context) : IPostService
     {
-        private readonly AppDbContext _context;
-
-        public PostService(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public async Task<IEnumerable<Post>> GetAll()
         {
@@ -45,8 +40,8 @@ namespace marvelHub.Service.Implements
                 .AsNoTracking()
                 .Include(p => p.User)
                 .Include(p => p.Theme)
-                .Where(p => p.Title.ToUpper()
-                    .Contains(title.ToUpper()))
+                .Where(p => p.Title
+                    .Contains(title))
                 .ToListAsync();
 
             return Post;

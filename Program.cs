@@ -3,6 +3,9 @@ using marvelHub.Validator;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using marvelHub.Model;
+using marvelHub.Service;
+using marvelHub.Service.Implements;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +30,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
 
+builder.Services.AddControllers()
+       .AddJsonOptions(options =>
+       {
+           options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+       });
+
+
 builder.Services.AddTransient<IValidator<Post>, PostValidator>();
 builder.Services.AddTransient<IValidator<Theme>, ThemeValidator>();
 builder.Services.AddTransient<IValidator<Comment>, CommentValidator>();
 builder.Services.AddTransient<IValidator<User>, UserValidator>();
+
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 var app = builder.Build();
 
